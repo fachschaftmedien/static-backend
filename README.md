@@ -2,8 +2,9 @@
 PHP ReST-API auf File Basis für den Static Bereich
 
 Für die Verwaltung eines öffentlichen Static-Bereiches wird die Struktur des Bereiches ggf. in JSON dargestellt.
-Sie kann über ReST-API abgefragt und verändert werden. Die API muss daher folgende REST Methoden bereit stellen. 
-
+Sie kann über ReST-API abgefragt und verändert werden. Die API muss daher folgende REST Methoden bereitstellen. 
+(Da wir aufgrund der unterliegenden FTP-Server-Struktur nur den Path mit Namen als unique betrachten können, 
+generiert sich die ID aus der base32 Repräsentation des MD5-Hash des Paths mit Namen)
 
 
 ## Methoden
@@ -16,28 +17,28 @@ Falls einzelne Verzeichnisse oder Dateien nicht lesbar sind, so werden sie nicht
 Sollten grundlegendere Fehler auftreten, so wird nichts zurückgegeben und der Status-Code der Response ist 500.
 
 
-`GET / resource`
+`GET / resource / {id}`
 
 Gibt als HTTP-Response die angefragte Resource und einen Status-Code 200 zurück.
 Siehe Resource für die Struktur der JSON, welche als Body der HTTP-Response zurückgegeben wird.
 Falls die Resource nicht abgerufen werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-`POST / resource`
+`POST / resource / {id}`
 
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.
 Falls die Resource nicht angelegt werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-`UPDATE / resource`
+`UPDATE / resource / {id}`
 
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.
 Falls die Resource nicht geändert werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-`DELETE / resource`
+`DELETE / resource / {id}`
 
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.

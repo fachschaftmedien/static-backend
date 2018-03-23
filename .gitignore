@@ -19,6 +19,9 @@ temp/
 data/DoctrineORMModule/Proxy/
 data/DoctrineORMModule/cache/
 
+#IntelliJ
+*.iml
+.idea/
 
 # Legacy ZF1
 demos/
