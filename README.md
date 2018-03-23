@@ -8,32 +8,37 @@ Sie kann über ReST-API abgefragt und verändert werden. Die API muss daher folg
 
 ## Methoden
 
-GET /resources
+`GET /resources`
+
 Gibt als HTTP-Response die komplette Verzeichnisstruktur als JSON und als Status-Code 200 zurück. 
 Siehe Struktur für das entsprechende JSON.
 Falls einzelne Verzeichnisse oder Dateien nicht lesbar sind, so werden sie nicht in der JSON aufgeführt.
 Sollten grundlegendere Fehler auftreten, so wird nichts zurückgegeben und der Status-Code der Response ist 500.
 
 
-GET / resource
+`GET / resource`
+
 Gibt als HTTP-Response die angefragte Resource und einen Status-Code 200 zurück.
 Siehe Resource für die Struktur der JSON, welche als Body der HTTP-Response zurückgegeben wird.
 Falls die Resource nicht abgerufen werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-POST / resource
+`POST / resource`
+
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.
 Falls die Resource nicht angelegt werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-UPDATE / resource
+`UPDATE / resource`
+
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.
 Falls die Resource nicht geändert werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und ein Status-Code 400 oder 500 zurück gegeben.
 
 
-DELETE / resource
+`DELETE / resource`
+
 Gibt als HTTP-Response nichts außer einem Status-Code 201 zurück.
 Siehe Resource für die Struktur der JSON, welche als Content des HTTP-Request erlaubt wird.
 Falls die Resource nicht gelöscht werden kann, wird eine JSON der Struktur Error mit Fehlerdaten und einen Status-Code 400 oder 500 zurück gegeben.
@@ -44,6 +49,7 @@ Falls die Resource nicht gelöscht werden kann, wird eine JSON der Struktur Erro
 Wichtig! Enthält keine Files oder Verzeichnisse, die nicht zum Static gehören und dazu dienen den Baum aufzubauen!
 
 Datei-Baum:
+```
 {
   "name": "",
   "path": "",
@@ -75,16 +81,20 @@ Datei-Baum:
     },
   ]
 }
+```
 
 Resource:
+```
 {
   "name": <String> "Name der Datei inklusive Datei-Endung",
   "path": <String> "Kompletter String inklusive name-Attribut, Verzeichnis-Separator: '/'"
 }
-
+```
 Error:
+```
 {
   "message": <String> "Fehlerbeschreibung",
   "trace": <String> (optional) "StackTrace",
   "code": <UInt> Fehlercode
 }
+```
