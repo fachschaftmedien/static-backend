@@ -21,7 +21,7 @@ data/DoctrineORMModule/cache/
 
 #IntelliJ
 *.iml
-.idea/
+.idea
 
 # Legacy ZF1
 demos/

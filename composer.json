@@ -1,0 +1,16 @@
+{
+  "name": "fs_medien/static_backend",
+  "description": "ReST-API for the static backend of fs medien",
+  "minimum-stability": "stable",
+  "license": "unlicense",
+  "authors": [
+    {
+      "name": "NasskalteJuni"
+    }
+  ],
+  "require": {
+    "firebase/php-jwt": "dev-master",
+    "zendframework/zend-config": "~2.3",
+    "zendframework/zend-http": "~2.3"
+  }
+}
