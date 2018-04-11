@@ -7,29 +7,56 @@
 
 class User{
 
-    private static $file = 'users.csv';
+    private static $file = __DIR__.'/users.csv';
     public $id;
     public $name;
     public $password;
     public $created;
 
+    /**
+     * create a new user (perhaps not persistent, call save for that)
+     * @param $attrArray array [id, name, password]
+     */
+    function __construct($attrArray = array(null, null, null, null)){
+        if( count(func_get_args()) >= 4) $attrArray = func_get_args();
+        $this->id = $attrArray[0];
+        $this->name = $attrArray[1];
+        $this->password = $attrArray[2];
+        $this->created = $attrArray[3];
+    }
+
+    /**
+     * converts this user object to a string
+     * @return String id,name,password,created
+     */
+    function __toString() {
+        return $this->id.",".$this->name.",".$this->password.",".$this->created;
+    }
+
     private static function getAll(){
-        $handle = fopen(User::$file,'r+');
-        $data = fgetcsv($handle);
-        fclose($handle);
+        $data = array_map('str_getcsv', file(User::$file));
+        if(!$data) $data = array();
         return $data;
     }
 
     private static function setAll($data){
-        $handle = fopen(User::$file, 'w+');
-        fputcsv($handle, $data);
+        $handle = fopen(User::$file, 'wr+');
+        foreach ($data as $line) {
+            fputcsv($handle, $line);
+        }
+        rewind($handle);
+        $contents = "";
+        while (!feof($handle)) {
+            $contents .= fread($handle, 8192);
+        }
         fclose($handle);
+        return $contents;
     }
 
     private static function indexInAllOf($id, $all){
         $i = 0;
         foreach($all as $user){
-            if($user->id == $id) return $i;
+            if($user && $user[0] == $id) return $i;
             $i++;
         }
         return -1;
@@ -56,22 +83,11 @@ class User{
     */
     public static function getByName($name){
         foreach(User::getAll() as $user){
-            if($user[1] == $name){
+            if($user && $user[1] == $name){
                 return new User($user);
             }
         }
         return null;
-    }
-
-    /**
-    * create a new user (perhaps not persistent, call save for that)
-    * @param $attrArray array [id, name, password]
-    */
-    function __construct($attrArray){
-        if( count(func_get_args()) >= 3) $attrArray = func_get_args();
-        $this->id = $attrArray[0];
-        $this->name = $attrArray[1];
-        $this->password = $attrArray[2];
     }
 
     /**
@@ -85,7 +101,7 @@ class User{
             $all = User::getAll();
             $i = User::indexInAllOf($this->id, $all);
             if($i >= 0){
-                array_splice($all,$i , 1);
+                array_splice($all, $i , 1);
                 User::setAll($all);
                 return true;
             }
@@ -106,9 +122,9 @@ class User{
             $all = User::getAll();
             $i = User::indexInAllOf($this->id, $all);
             if($i === -1){
-                array_push($all,[$this->id, $this->name, $this->password]);
+                array_push($all,[$this->id, $this->name, $this->password, $this->created]);
             }else{
-                $all[$i] = [$this->id, $this->name, $this->password];
+                $all[$i] = [$this->id, $this->name, $this->password, $this->created];
             }
             User::setAll($all);
             return true;
@@ -131,36 +147,39 @@ class User{
     function complete(){
         // try to complete the user ID by username or assigning next ID
         if(!$this->id){
+            $isNew = true;
             if($this->name){
-                $foundId = User::getByName($this->name)->id;
-                if($foundId){
-                    $this->id = $foundId;
-                }else{
-                    $all = User::getAll();
-                    $userCount = count($all);
-                    if($userCount === 0) $this->id = 1;
-                    else $this->id = $all[$userCount-1][0]++;
+                $foundUser = User::getByName($this->name);
+                if($foundUser && $foundUser->id){
+                    $this->id = $foundUser->id;
+                    $isNew = false;
                 }
+            }
+            if($isNew){
+                $all = User::getAll();
+                $userCount = count($all);
+                if($userCount === 0) $this->id = 1;
+                else $this->id = intval($all[$userCount-1][0])+1;
             }
         }
         if(!$this->name){
-            $foundName = User::getById($this->id)->name;
-            if($foundName){
-                $this->name = $foundName;
+            $foundUser = User::getById($this->id);
+            if($foundUser && $foundUser->name){
+                $this->name = $foundUser->name;
             }
         }
         if(!$this->created){
-            $foundCreated = User::getById($this->id)->created;
-            if($foundCreated){
-                $this->created = $foundCreated;
+            $foundUser = User::getById($this->id);
+            if($foundUser && $foundUser->created){
+                $this->created = $foundUser->created;
             }else{
                 $this->created = date(DATE_ATOM);
             }
         }
         if(!$this->password){
-            $foundPassword = User::getById($this->id)->password;
-            if($foundPassword){
-                $this->password = $foundPassword;
+            $foundUser = User::getById($this->id);
+            if($foundUser && $foundUser->password){
+                $this->password = $foundUser->password;
             }
         }
     }

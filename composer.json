@@ -9,8 +9,16 @@
     }
   ],
   "require": {
-    "firebase/php-jwt": "dev-master",
+    "php": "<=5.4.0",
+    "firebase/php-jwt": "^5.0",
     "zendframework/zend-config": "~2.3",
-    "zendframework/zend-http": "~2.3"
+    "zendframework/zend-http": "~2.3",
+    "slim/slim": "^3.9",
+    "tuupola/slim-jwt-auth": "^3.0",
+    "zendframework/zend-servicemanager": "^3.3",
+    "zendframework/zend-json": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {"Self\\": "static-backend/"}
   }
 }

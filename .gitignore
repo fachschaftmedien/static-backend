@@ -23,6 +23,13 @@ data/DoctrineORMModule/cache/
 *.iml
 .idea
 
+# stored data
+*.csv
+*.tsv
+
+#  configuration files containing non public or machine specific info
+config.*
+
 # Legacy ZF1
 demos/
 extras/documentation

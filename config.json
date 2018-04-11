@@ -1,0 +1,11 @@
+{
+  "webhost": "static.fachschaftmedien.de",
+  "mode": "dev",
+  "rest": {
+    "secret": "9BJvhOjkSM3otlNRHtQCjnGhJ3jMdAbdmjb8iEDAUBbqBCi0QAyhLYc540ecFUQK55uA5ddDoDHA1fTfvN3ekw==",
+    "startDelay": 1,
+    "validity": 10800,
+    "uploadFolder": "uploads",
+    "downloadFolder": "downloads"
+  }
+}
